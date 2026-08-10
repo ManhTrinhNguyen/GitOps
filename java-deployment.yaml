@@ -1,0 +1,93 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-server
+data:
+  DB_SERVER: mysql-primary-headless.default.svc.cluster.local
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mysql-secret
+type: Opaque
+data:
+  DB_PWD: cGFzc3dvcmQ=
+  DB_USER: dGlt
+  DB_NAME: bXlkYXRhYmFzZQ==
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: java-app
+  name: java-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: java-app
+  template:
+    metadata:
+      labels:
+        app: java-app
+    spec:
+      imagePullSecrets:
+        - name: docker-secret
+      containers:
+      - image: nguyenmanhtrinh/demo-app:java-app-v1
+        imagePullPolicy: Always
+        name: demo-app
+        ports:
+        - containerPort: 8080
+        env: 
+        - name: DB_PWD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: DB_PWD
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: DB_USER
+        - name: DB_NAME
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: DB_NAME
+        - name: DB_SERVER
+          valueFrom:
+            configMapKeyRef:
+              name: mysql-server
+              key: DB_SERVER
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: java-app-service
+spec: 
+  selector:
+    app: java-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: java-app-ingress
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: "a5bb8f5ffc259466cabab09651eb2e8e-1306112510.us-west-1.elb.amazonaws.com"
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: java-app-service
+            port:
+              number: 80
+        
