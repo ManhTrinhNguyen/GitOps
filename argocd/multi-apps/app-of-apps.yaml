@@ -8,7 +8,7 @@ spec:
   source: 
     repoURL: https://github.com/ManhTrinhNguyen/GitOps.git
     targetRevision: HEAD
-    path: ./argocd/multi-apps
+    path: ./argocd/applications
   destination:
     server: https://kubernetes.default.svc
     namespace: kube-system
