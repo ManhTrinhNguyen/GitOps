@@ -1,0 +1,42 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+
+metadata:
+  name: nginx-ingress
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+
+spec:
+  project: default
+
+  sources: 
+
+  # Third-party Helm chart
+  - repoURL: https://kubernetes.github.io/ingress-nginx
+    chart: ingress-nginx/ingress-nginx
+    targetRevision: 4.15.0
+
+    helm: 
+      releaseName: nginx-ingress
+
+      valueFiles: 
+      - $values/argocd/helm/ingress-nginx/values-dev.yaml
+
+  # My GitOps configuration repo
+  - repoURL: https://github.com/ManhTrinhNguyen/GitOps.git
+    targetRevision: main
+    ref: values
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+
+  syncPolicy: 
+    automated: 
+      prune: true
+      selfHeal: true
+    
+    syncOptions:
+    - CreateNamespace=true
+

@@ -1,0 +1,7 @@
+controller:
+  metrics:
+    enable: true
+  serviceMonitor:
+    enable: true
+    additionalLabels:
+      release: prometheus-stack
