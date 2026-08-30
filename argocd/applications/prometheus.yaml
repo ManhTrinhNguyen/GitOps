@@ -1,0 +1,42 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+
+metadata:
+  name: prometheus
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+
+spec:
+  project: default
+
+  sources: 
+
+  # Third-party Helm chart
+  - repoURL: oci://ghcr.io/prometheus-community/charts/prometheus
+    chart: prometheus-community/kube-prometheus-stack
+    targetRevision: 29.27.0
+
+    helm: 
+      releaseName: prometheus
+
+      valueFiles: 
+      - $values/argocd/helm/prometheus/values-dev.yaml
+
+  # My GitOps configuration repo
+  - repoURL: https://github.com/ManhTrinhNguyen/GitOps.git
+    targetRevision: main
+    ref: values
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: monitoring
+
+  syncPolicy: 
+    automated: 
+      prune: true
+      selfHeal: true
+    
+    syncOptions:
+    - CreateNamespace=true
+
