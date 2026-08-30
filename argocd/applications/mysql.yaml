@@ -15,7 +15,7 @@ spec:
     # Third-party Helm chart
     - repoURL: registry-1.docker.io/bitnamicharts
       chart: mysql
-      targetRevision: 14.0.5
+      targetRevision: 14.0.3
 
       helm:
         releaseName: mysql
