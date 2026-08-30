@@ -1,0 +1,39 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+
+metadata:
+  name: mysql
+  namespace: argocd
+
+spec:
+  project: default
+
+  sources:
+
+    # Third-party Helm chart
+    - repoURL: registry-1.docker.io/bitnamicharts
+      chart: mysql
+      targetRevision: latest
+
+      helm:
+        releaseName: mysql
+
+        valueFiles:
+          - $values/argocd/helm/bitnami-mysql/values-dev.yaml
+
+    # My GitOps configuration repo
+    - repoURL: https://github.com/ManhTrinhNguyen/GitOps.git
+      targetRevision: main
+      ref: values
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+
+    syncOptions:
+      - CreateNamespace=true
