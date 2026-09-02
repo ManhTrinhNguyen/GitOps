@@ -13,9 +13,9 @@ spec:
   sources: 
 
   # Third-party Helm chart
-  - repoURL: oci://ghcr.io/prometheus-community/charts/prometheus
+  - repoURL: oci://ghcr.io/prometheus-community/charts/kube-prometheus-stack
     chart: prometheus-community/kube-prometheus-stack
-    targetRevision: 29.27.0
+    targetRevision: 88.6.3
 
     helm: 
       releaseName: prometheus
