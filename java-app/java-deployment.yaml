@@ -34,7 +34,7 @@ spec:
       imagePullSecrets:
         - name: docker-secret
       containers:
-      - image: nguyenmanhtrinh/demo-app:java-app-v1
+      - image: 660753258283.dkr.ecr.us-west-1.amazonaws.com/java-app:0.0.2
         imagePullPolicy: Always
         name: demo-app
         ports:
