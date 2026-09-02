@@ -224,7 +224,7 @@ Argo CD will reconcile the cluster to the reverted state. Argo CD's **History an
 
 This repository is a learning and portfolio project. Apply these changes before using it in a shared or production environment:
 
-- Do not store database passwords or other credentials in Git, even when values are base64-encoded. Use AWS Secrets Manager with External Secrets Operator or the Secrets Store CSI Driver, or use Sealed Secrets/SOPS.
+- Do not store database passwords or other credentials in Git, even when values are base64-encoded. Use AWS Secrets Manager with External Secrets Operator or the Secrets Store CSI Driver.
 - Replace static image-pull credentials with EKS Pod Identity, IRSA, or ECR permissions assigned to worker nodes where appropriate.
 - Give the Cluster Autoscaler a least-privilege AWS IAM role and avoid long-lived AWS access keys.
 - Pin container images to immutable versions or digests instead of using `latest`.
