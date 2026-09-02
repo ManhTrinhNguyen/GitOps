@@ -2,8 +2,6 @@
 
 ### ArgoCD Architecture 
 
-
-
 Go to `cd GitOps`
 Step 1: Install Argocd in the Cluster 
 
@@ -102,3 +100,6 @@ Go to Setting Icon in the UI -> Project -> Create Project
 **Roles**: Used to control who can perform which action on application to that project
 
 Get project format : `argocd proj get <project-name> -o yaml`
+
+## Jenkins CI with GitOps
+
